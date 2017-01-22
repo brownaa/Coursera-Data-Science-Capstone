@@ -5,7 +5,7 @@ recursive_loading: FALSE
 munging: FALSE
 logging: FALSE
 load_libraries: TRUE
-libraries: reshape2, dplyr, ggplot2, stringr, lubridate, NLP, hunspell, magrittr, RWeka
+libraries: reshape2, dplyr, ggplot2, stringr, lubridate, NLP, hunspell, magrittr, RWeka, tm, SnowballC
 as_factors: TRUE
 data_tables: TRUE
 attach_internal_libraries: FALSE
