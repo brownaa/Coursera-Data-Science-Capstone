@@ -3,6 +3,10 @@
 ## and clean up the unzipped directories                                    ##
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+if (!require(pacman)) install.packages('pacman')
+pacman::p_load('ProjectTemplate')
+load.project()
+
 dir.create("data")
 Sys.chmod(file.path(getwd(),"data"), 
           mode = "775", #modify permission of the folder to allow writing
@@ -22,4 +26,4 @@ file.rename(from = file.path(getwd(), "data/final/fi_FI"),
             to   = file.path(getwd(), "data/fi_FI"))
 file.rename(from = file.path(getwd(), "data/final/ru_RU"),
             to   = file.path(getwd(), "data/ru_RU"))
-file.remove(file.path(getwd(),"data/final"))  # delete 'final' directory
+# file.remove(file.path(getwd(),"data/final"))  # delete 'final' directory
