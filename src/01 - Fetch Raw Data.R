@@ -3,6 +3,9 @@
 ## and clean up the unzipped directories                                    ##
 ## ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ##
 
+# if(file.exists(file.path(getwd(), "data/de_DE"))) #need to finish
+    #writing this part of the script so that it does not execute 
+
 if (!require(pacman)) install.packages('pacman')
 pacman::p_load('ProjectTemplate')
 load.project()
@@ -11,8 +14,12 @@ dir.create("data")
 Sys.chmod(file.path(getwd(),"data"), 
           mode = "775", #modify permission of the folder to allow writing
           use_umask = FALSE)
+
+swiftkey_file = "./data/Coursera-SwiftKey.zip"
+if(file.exists(swiftkey_file))
+    file.remove(swiftkey_file)
 download.file(url = "https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip",
-              destfile = "./data/Coursera-SwiftKey.zip")
+              destfile = swiftkey_file)
 
 unzip(zipfile = file.path(getwd(),"data/Coursera-SwiftKey.zip"),
       exdir = file.path(getwd(), "data"))

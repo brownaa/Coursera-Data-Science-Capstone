@@ -2,13 +2,26 @@ if (!require(pacman)) install.packages('pacman')
 pacman::p_load('ProjectTemplate')
 load.project()
 
-all_corpus = data.frame(corpus = c("./data/de_DE/", "./data/en_US/", 
-                                   "./data/fi_FI/", "./data/ru_ru/"),
-                        language = c("de-DE", "en-US", "fi-FI", "ru-RU"))
 
-getCorpusStats = function(corp) {
-    corp = Corpus(DirSource(as.character(corp$corpus)), 
-                  readerControl = list(language = corp$language))
+getCorpusStats = function(x, language) {
+    corp = load_corpus(x)
+    
+    corp = corpusTransform(corp)
+    #get total words
+    
+    #get total characters
+    #get total lines
+    #get frequency of line lengths (possibly after stemming)
+    #get num words needed to make up 50% of the corpus
+    #get num words needed to make up 90% of the corpus
+    #can you save a plot as part of the variable space?
+        #if so do one for top 10/20/50/100 words
+    
+    corp = us_blog = tm_map(us_blog, content_transformer(tolower)) 
+    us_blog = tm_map(us_blog, removeWords, stopwords("english")) 
+    us_blog = tm_map(us_blog, removePunctuation) 
+    us_blog = tm_map(us_blog, removeNumbers) 
+    us_blog = tm_map(us_blog, stripWhitespace)  
 }
 
 us_blog = Corpus(DirSource("./data/en_US/"))
@@ -18,7 +31,7 @@ us_blog = tm_map(us_blog, removeWords, stopwords("english"))
 us_blog = tm_map(us_blog, removePunctuation) 
 us_blog = tm_map(us_blog, removeNumbers) 
 us_blog = tm_map(us_blog, stripWhitespace) 
-us_blog_stemmed = tm_map(us_blog, stemDocument) #stemmed
+# us_blog_stemmed = tm_map(us_blog, stemDocument) #stemmed
 cntl = list(wordLengths = c(3, Inf))
 dtm <- DocumentTermMatrix(us_blog, control = cntl)
 # inspect(dtm)

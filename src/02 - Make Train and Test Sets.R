@@ -1,47 +1,36 @@
-
 #load project setup
 if (!require(pacman)) install.packages('pacman')
 pacman::p_load('ProjectTemplate')
 load.project()
 
-getFiles = function(loc)
-    return(list.files(path = loc, recursive = TRUE))
+## approach adapted from:
+## http://stackoverflow.com/questions/14822333/split-sample-of-r-tm-corpus-objects
 
-writeFile = function(x, filename) {
-    con = files(filename)
-    open(con, "w")
-    writeLines(x, con)
-    close(con)
-}
 
-splitFile = function(dat, filename, loc, trainfraction = 0.8) {
-    set.seed(2312)
+## Split into training and test sets
+split_tsets = function(corp, trainfrac = 0.8) {
+    corp_length = length(corp)
     
-    #set training indexes (80% of dat)
-    idx = sample(1:nrow(dat), size=0.2*nrow(dat))
-    
-    #split dataset
-    train = dat[idx,]
-    test = dat[-idx,]
-    
-    writeFile(train, paste0(loc, "/", filename, ".train.txt"))
-    writeFile(test,  paste0(loc, "/", filename, ".test.txt"))
-}
-
-readData = function(loc) {
-    files = getFiles(loc)
-    
-    for (i in 1:length(files)) {
-        con = file(paste0(loc, "/", files[i]))
-        open(con, "r")
-        dat = readLines(con, encoding = "UTF-8")
-        close(con)
-        
-        splitFile(dat, files[i], loc)
+    for(i in 1:corp_length){
+        len = length(corp[[i]]$content)
+        tset = as.character(rbinom(len, 1, trainfrac))
+        tset[tset == "1"] = "train"
+        tset[tset == "0"] = "test"
+        meta(corp[[i]], tag = "tset") = as.factor(tset)
     }
-    
+    return(corp)
 }
 
+for(i in 1:nrow(all_corpus)) {
+    dr = as.character(all_corpus[i,1])
+    save_filename = paste0(dr, "corpus.RData")
 
-loc = c("./data/de_DE", "./data/en_US", "./data/fi_FI", "./data/ru_ru")
-readData(loc[1])
+    if(!file.exists(save_filename)) {
+        language = as.character(all_corpus[i,2])
+        corp = Corpus(DirSource(dr), 
+                      readerControl = list(language = language))
+        corp = split_tsets(corp = corp)
+        
+        save(corp, file = save_filename)
+    }
+}
