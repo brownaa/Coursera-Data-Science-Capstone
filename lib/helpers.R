@@ -23,3 +23,7 @@ corpusTransform = function(x) {
         tm_map(stripWhitespace)
     return(x)
 }
+
+# keep_tset = fucntion(x, keep) {
+#     
+# }
